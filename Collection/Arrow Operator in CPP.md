@@ -20,3 +20,8 @@ int main() {
   return 0;
 }
 ```
+OUTPUT:
+```
+a.b = 5
+x->b = 5
+```
