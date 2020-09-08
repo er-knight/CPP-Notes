@@ -26,7 +26,7 @@ A char variable holds a 1-byte integer. However, instead of interpreting the val
 If a boolean value is assigned to an integer, true becomes 1 and false becomes 0.
 If an integer value is assigned to a Boolean, 0 becomes false and any value that has a non-zero value becomes true.
 
-Pointer:
+**Pointer:**
 ```cpp
 int *ptr; // declaring pointer variable
 int x = 5;
@@ -89,7 +89,10 @@ p = new int; // reuse for a new address
 ```
 
 The NULL pointer is a constant with a value of zero that is defined in several of the standard libraries, including iostream.
-It's a good practice to assign NULL to a pointer variable when you declare it, in case you do not have exact address to be assigned. A pointer assigned NULL is called a null pointer. For example: int \*ptr = NULL;
+It's a good practice to assign NULL to a pointer variable when you declare it, in case you do not have exact address to be assigned. A pointer assigned NULL is called a null pointer. 
+```cpp
+int *ptr = NULL;
+```
 
 Dynamic memory can also be allocated for arrays.
 ```cpp
