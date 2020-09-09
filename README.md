@@ -372,3 +372,166 @@ We defined a constructor, that takes one parameter and assigns it to the name at
 When creating an object, you now need to pass the constructor's parameter, as you would when calling a function.
 We've defined two objects, and used the constructor to pass the initial value for the name attribute for each object.
 It's possible to have multiple constructors that take different numbers of parameters.
+
+Source & Header Files
+
+The header file (.h) holds the function declarations (prototypes) and variable declarations.
+It currently includes a template for our new MyClass class, with one default constructor.
+- MyClass.h
+```cpp
+#ifndef MYCLASS_H
+#define MYCLASS_H
+
+class MyClass
+{
+  public:
+    MyClass();
+  protected:
+  private:
+};
+
+#endif // MYCLASS_H
+```
+The implementation of the class and its methods go into the source file (.cpp).
+Currently it includes just an empty constructor.
+- MyClass.cpp
+```cpp
+#include "MyClass.h"
+
+MyClass::MyClass()
+{
+   //constructor
+}
+```
+The double colon in the source file (.cpp) is called the scope resolution operator, and it's used for the constructor definition.
+
+To use our classes in our main, we need to include the header file.
+```cpp
+#include <iostream>
+#include "MyClass.h"
+using namespace std;
+
+int main() {
+  MyClass obj;
+}
+```
+The header declares "what" a class (or whatever is being implemented) will do, while the cpp source file defines "how" it will perform those features.
+
+**Destructors**
+
+Destructors are special functions, as well. They're called when an object is destroyed or deleted.
+```cpp
+class MyClass {
+  public: 
+    ~MyClass() {
+     // some code
+    }
+};
+```
+
+Since destructors can't take parameters, they also can't be overloaded.
+Each class will have just one destructor. Defining a destructor is not mandatory, if you don't need one, you don't have to define one.
+
+**#ifndef & #define**
+
+We created separate header and source files for our class, which resulted in this header file.
+```cpp
+#ifndef MYCLASS_H
+#define MYCLASS_H
+
+class MyClass
+{
+  public:
+  MyClass();
+  protected:
+  private:
+};
+
+#endif // MYCLASS_H 
+```
+ifndef stands for "if not defined". The first pair of statements tells the program to define the MyClass header file if it has not been defined already.
+This prevents a header file from being included more than once within one file. endif ends the condition.
+
+Dot Operator
+
+Next, we'll create an object of the type MyClass, and call its myPrint() function using the dot (.) operator:
+```cpp
+#include "MyClass.h"
+
+int main() {
+  MyClass obj;
+  obj.myPrint();
+}
+```
+
+Pointers
+
+We can also use a pointer to access the object's members.
+The following pointer points to the obj object:
+```cpp
+MyClass obj;
+MyClass *ptr = &obj;
+```
+The type of the pointer is MyClass, as it points to an object of that type.
+
+Selection Operator
+
+The arrow member selection operator (->) is used to access an object's members with a pointer.
+```cpp
+MyClass obj;
+MyClass *ptr = &obj;
+ptr->myPrint();
+```
+
+When working with an object, use the dot member selection operator (.).
+When working with a pointer to the object, use the arrow member selection operator (->).
+
+**Constants**
+
+A constant is an expression with a fixed value. It cannot be changed while the program is running.
+Use the `const` keyword to define a constant variable. 
+```cpp
+const int x = 42;
+```
+All constant variables must be initialized at the time of their creation.
+
+Constant Objects
+
+As with the built-in data types, we can make class objects constant by using the const keyword.
+```cpp
+const MyClass obj;
+```
+All const variables must be initialized when they're created. In the case of classes, this initialization is done via constructors. If a class is not initialized using a parameterized constructor, a public default constructor must be provided - if no public default constructor is provided, a compiler error will occur.
+
+Once a const class object has been initialized via the constructor, you cannot modify the object's member variables. This includes both directly making changes to public member variables and calling member functions that set the value of member variables.
+When you've used const to declare an object, you can't change its data members during the object's lifetime.
+
+Only non-const objects can call non-const functions.
+A constant object can't call regular functions. Hence, for a constant object to work you need a constant function.
+
+To specify a function as a const member, the const keyword must follow the function prototype, outside of its parameters' closing parenthesis. For const member functions that are defined outside of the class definition, the const keyword must be used on both the function prototype and definition. 
+- MyClass.h 
+```cpp
+class MyClass
+{
+  public:
+    void myPrint() const;
+};
+```
+- MyClass.cpp 
+```cpp
+#include "MyClass.h"
+#include <iostream>
+using namespace std;
+
+void MyClass::myPrint() const {
+  cout <<"Hello"<<endl;
+}
+```
+Now the myPrint() function is a constant member function. As such, it can be called by our constant object:
+```cpp
+int main() {
+  const MyClass obj;
+  obj.myPrint();
+}
+```
