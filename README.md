@@ -972,7 +972,7 @@ A derived class inherits all base class methods with the following exceptions:
 - The friend functions
 A class can be derived from multiple classes by specifying the base classes in a comma-separated list. For example: `class Daughter: public Mother, public Father`
 
-**protected
+**protected**
 
 There is one more access specifier - protected.
 A protected member variable or function is very similar to a private member, with one difference - it can be accessed in the derived classes.
