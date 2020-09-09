@@ -612,3 +612,382 @@ int main() {
 ```
 The member initialization list may be used for regular variables, and must be used for constant variables.
 Even in cases in which member variables are not constant, it makes good sense to use the member initializer syntax.
+
+**Composition**
+
+In the real world, complex objects are typically built using smaller, simpler objects. For example, a car is assembled using a metal frame, an engine, tires, and a large number of other parts. This process is called composition.
+
+In C++, object composition involves using classes as member variables in other classes.
+This sample program demonstrates composition in action. It contains Person and Birthday classes, and each Person will have a Birthday object as its member.
+- Birthday 
+```cpp
+class Birthday {
+ public:
+  Birthday(int m, int d, int y): month(m), day(d), year(y) { }
+ private:
+   int month;
+   int day;
+   int year;
+};
+```
+Our Birthday class has three member variables. It also has a constructor that initializes the members using a member initialization list.
+The class was declared in a single file for the sake of simplicity. Alternatively, you could use header and source files.
+
+Let's also add a printDate() function to our Birthday class: 
+```cpp
+class Birthday {
+ public:
+  Birthday(int m, int d, int y): month(m), day(d), year(y) { }
+  void printDate() {
+   cout<<month<<"/"<<day<<"/"<<year<<endl;
+  }
+ private:
+  int month;
+  int day;
+  int year;
+};
+```
+
+Next, we can create the Person class, which includes the Birthday class.
+```cpp
+#include <string>
+#include "Birthday.h"
+
+class Person {
+ public:
+  Person(string n, Birthday b): name(n),bd(b) { }
+ private:
+  string name;
+  Birthday bd;
+};
+```
+The Person class has a name and a Birthday member, and a constructor to initialize them.
+Ensure that the corresponding header files are included.
+
+Now, our Person class has a member of type Birthday:
+```cpp
+class Person {
+ public:
+  Person(string n, Birthday b): name(n),bd(b) { }
+ private:
+  string name;
+  Birthday bd;
+};
+```
+Composition is used for objects that share a has-a relationship, as in "A Person has a Birthday".
+Let's add a printInfo() function to our Person class, that prints the data of the object: 
+```cpp
+class Person {
+ public:
+  Person(string n, Birthday b)
+  : name(n),
+  bd(b)
+  {
+  }
+  void printInfo()
+  {
+   cout << name << endl;
+   bd.printDate();
+  }
+ private:
+  string name;
+  Birthday bd;
+};
+```
+Notice that we can call the bd member's printDate() function, since it's of type Birthday, which has that function defined.
+
+Now that we've defined our Birthday and Person classes, we can go to our main, create a Birthday object, and then pass it to a Person object.
+```cpp
+int main() {
+  Birthday bd(2, 21, 1985);
+  Person p("David", bd);
+  p.printInfo();
+}
+
+/*Outputs
+David
+2/21/1985
+*/
+```
+
+We've created a Birthday object for the date of 2/21/1985. Next, we created a Person object and passed the Birthday object to its constructor. Finally, we used the Person object's printInfo() function to print its data.
+In general, composition serves to keep each individual class relatively simple, straightforward, and focused on performing one task. It also enables each sub-object to be self-contained, allowing for reusability (we can use the Birthday class within various other classes).
+
+**Friend Functions**
+
+Normally, private members of a class cannot be accessed from outside of that class.
+However, declaring a non-member function as a friend of a class allows it to access the class' private members. This is accomplished by including a declaration of this external function within the class, and preceding it with the keyword friend.
+In the example below, someFunc(), which is not a member function of the class, is a friend of MyClass and can access its private members.
+```cpp
+class MyClass {
+ public:
+  MyClass() {
+   regVar = 0;
+  }
+ private:
+  int regVar;
+    
+  friend void someFunc(MyClass &obj);
+};
+```
+Note that when passing an object to the function, we need to pass it by reference, using the & operator.
+
+The function someFunc() is defined as a regular function outside the class. It takes an object of type MyClass as its parameter, and is able to access the private data members of that object.
+```cpp
+class MyClass {
+ public:
+  MyClass() {
+   regVar = 0;
+  }
+ private:
+  int regVar;
+    
+ friend void someFunc(MyClass &obj);
+};
+
+void someFunc(MyClass &obj) {
+  obj.regVar = 42;
+  cout << obj.regVar;
+}
+```
+The someFunc() function changes the private member of the object and prints its value.
+To make its members accessible, the class has to declare the function as a friend in its definition. You cannot "make" a function a friend to a class without the class "giving away" its friendship to that function.
+
+Now we can create an object in main and call the someFunc() function:
+```cpp
+int main() {
+  MyClass obj;
+  someFunc(obj);
+}
+
+//Outputs 42
+```
+
+someFunc() had the ability to modify the private member of the object and print its value.
+
+Typical use cases of friend functions are operations that are conducted between two different classes accessing private members of both.
+You can declare a function friend across any number of classes.
+Similar to friend functions, you can define a friend class, which has access to the private members of another class.
+
+**this keyword**
+
+Every object in C++ has access to its own address through an important pointer called the this pointer.
+Inside a member function this may be used to refer to the invoking object.
+Let's create a sample class: 
+```cpp
+class MyClass {
+ public:
+  MyClass(int a) : var(a)
+  { }
+ private:
+  int var;
+};
+```
+Friend functions do not have a this pointer, because friends are not members of a class. 
+
+The printInfo() method offers three alternatives for printing the member variable of the class. 
+```cpp
+class MyClass {
+ public:
+  MyClass(int a) : var(a)
+  { }
+  void printInfo() {
+   cout << var<<endl;
+   cout << this->var<<endl;
+   cout << (*this).var<<endl; 
+  }
+ private:
+  int var;
+};
+```
+All three alternatives will produce the same result.
+this is a pointer to the object, so the arrow selection operator is used to select the member variable.
+
+To see the result, we can create an object of our class and call the member function.
+```cpp
+#include <iostream>
+using namespace std;
+
+class MyClass {
+ public:
+  MyClass(int a) : var(a)
+  { }
+  void printInfo() {
+   cout << var <<endl;
+   cout << this->var <<endl;
+   cout << (*this).var <<endl; 
+  }
+ private:
+  int var;
+};
+
+int main() {
+  MyClass obj(42);
+  obj.printInfo();
+}
+
+/* Outputs
+42
+42
+42
+*/
+```
+
+All three of the ways to access the member variable work.
+Note that only member functions have a this pointer.
+
+You may be wondering why it's necessary to use the this keyword, when you have the option of directly specifying the variable.
+The this keyword has an important role in operator overloading.
+
+**Operator Overloading**
+
+Most of the C++ built-in operators can be redefined or overloaded.
+Thus, operators can be used with user-defined types as well (for example, allowing you to add two objects together).
+
+[This](https://api.sololearn.com/DownloadFile?id=2463) chart shows the operators that can be overloaded. Operators that can't be overloaded include :: | .* | . | ?:
+
+Let's declare a sample class to demonstrate operator overloading: 
+```cpp
+class MyClass {
+ public:
+  int var;
+  MyClass() {}
+  MyClass(int a)
+  : var(a) { }
+};
+```
+Our class has two constructors and one member variable.
+We will be overloading the + operator, to enable adding two objects of our class together.
+
+Overloaded operators are functions, defined by the keyword operator followed by the symbol for the operator being defined.
+An overloaded operator is similar to other functions in that it has a return type and a parameter list.
+
+In our example we will be overloading the + operator. It will return an object of our class and take an object of our class as its parameter. 
+```cpp
+class MyClass {
+ public:
+  int var;
+  MyClass() {}
+  MyClass(int a)
+  : var(a) { }
+
+  MyClass operator+(MyClass &obj) {
+  }
+};
+```
+We need our + operator to return a new MyClass object with a member variable equal to the sum of the two objects' member variables.
+```cpp
+class MyClass {
+ public:
+  int var;
+  MyClass() {}
+  MyClass(int a)
+  : var(a) { }
+
+  MyClass operator+ (MyClass &obj) {
+   MyClass res;
+   res.var= this->var+obj.var;
+   return res; 
+  }
+};
+```
+Here, we declared a new res object. We then assigned the sum of the member variables of the current object (this) and the parameter object (obj) to the res object's var member variable. The res object is returned as the result.
+
+This gives us the ability to create objects in main and use the overloaded + operator to add them together.
+```cpp
+int main() {
+  MyClass obj1(12), obj2(55);
+  MyClass res = obj1+obj2;
+
+  cout << res.var;
+}
+
+//Outputs 67
+```
+
+With overloaded operators, you can use any custom logic needed. However, it's not possible to alter the operators' precedence, grouping, or number of operands.
+
+**Inheritance**
+
+To demonstrate inheritance, let's create a Mother class and a Daughter class: 
+```cpp
+class Mother
+{
+ public:
+  Mother() {};
+  void sayHi() {
+    cout << "Hi";
+  } 
+};
+
+class Daughter 
+{
+ public: 
+  Daughter() {};
+};
+```
+The Mother class has a public method called sayHi().
+
+This syntax derives the Daughter class from the Mother class.
+```cpp
+class Daughter : public Mother
+{
+ public: 
+  Daughter() {};
+};
+```
+The Base class is specified using a colon and an access specifier `: public` means, that all public members of the base class are public in the derived class.
+In other words, all public members of the Mother class become public members of the Daughter class.
+
+As all public members of the Mother class become public members for the Daughter class, we can create an object of type Daughter and call the sayHi() function of the Mother class for that object:
+```cpp
+#include <iostream>
+using namespace std;
+
+class Mother
+{
+ public:
+  Mother() {};
+  void sayHi() {
+   cout << "Hi";
+  }
+};
+
+class Daughter: public Mother
+{
+ public:
+  Daughter() {};
+};
+
+int main() {
+  Daughter d;
+  d.sayHi();
+}
+//Outputs "Hi"
+```
+
+A derived class inherits all base class methods with the following exceptions:
+- Constructors, destructors
+- Overloaded operators
+- The friend functions
+A class can be derived from multiple classes by specifying the base classes in a comma-separated list. For example: `class Daughter: public Mother, public Father`
+
+**protected
+
+There is one more access specifier - protected.
+A protected member variable or function is very similar to a private member, with one difference - it can be accessed in the derived classes.
+```cpp
+class Mother {
+ public:
+  void sayHi() {
+   cout << var;
+  }
+
+ private:
+  int var=0;
+
+ protected:
+  int someVar;
+};
+```
+Now someVar can be accessed by any class that is derived from the Mother class.
