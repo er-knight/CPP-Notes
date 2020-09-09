@@ -213,3 +213,106 @@ int main() {
   std::cout <<sum(x, y)<<"\n"; // 6.1
 }
 ```
+
+An array can also be passed to a function as an argument.  
+The parameter should be defined as an array using square brackets, when declaring the function.  
+```cpp
+#include <iostream>
+using namespace std;
+
+int sum(int arr[], int size) {
+  int sum = 0;
+  for (int i=0; i<size; i++) {
+    sum += arr[i];
+  }
+  return sum;
+}
+
+int main() {
+  int myarray[] = {3, 4, 5};
+  cout<<sum(myarray, 3);
+}
+```
+
+
+There are two ways to pass arguments to a function as the function is being called.
+
+- pass by value: This method copies the argument's actual value into the function's formal parameter. Here, we can make changes to the parameter within the function without having any effect on the argument.
+
+Note: formal parameters defined at function definition and actual parameters are passed at function call.
+
+- pass by reference: This method copies the argument's reference into the formal parameter. Within the function, the reference is used to access the actual argument used in the call. This means that any change made to the parameter affects the argument.
+```cpp
+#include <iostream>
+using namespace std;
+
+void func(int *a) {
+  *a = 20;
+}
+
+int main() {
+  int p = 10;
+  func(&p);
+  cout<<p; // 20
+}
+```
+Note: By default, C++ uses call by value to pass arguments.
+
+**Classes and Objects:**
+- characteristics/properties of objects are called attributes.
+- each object has its own identity (name), attributes (characteristics) and behavior (methods).
+- class is blueprint of its objects.
+
+class structure:
+```cpp
+class myClass {
+ 
+};
+```
+Note: A class definition must be followed by a semicolon.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Dog {
+  public:
+    void sound() {
+      cout<<"bhau..bhau..";
+    }
+};
+
+int main() {
+  Dog tommy = Dog(); // creating object - 
+  tommy.sound();
+}
+```
+- Abstraction
+- Encapsulation (Data Hiding)
+- 
+
+Access Specifiers:
+- public: attributes and methods specified with public can be accessed outside the class through objects of that class.
+- private: attributes and methods specified with public can be accessed only inside the class through objects of that class.
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+class myClass {
+  public:
+    void setName(string x) {
+      name = x;
+    }
+  private:
+    string name;
+};
+
+int main() {
+  myClass myObj;
+  myObj.setName("John");
+
+  return 0;
+}
+```
+Note: If no access specifier is defined, all members of a class are set to private by default.
