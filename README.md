@@ -112,3 +112,104 @@ Example:
 ```cpp
 cout<<sizeof(int); // 4
 ```
+
+rand():
+```cpp
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+int main() {
+  cout << rand();
+}
+```
+
+Note: Use the modulo (%) operator to generate random numbers within a specific range.  
+The example below generates whole numbers within a range of 1 to 6.
+```cpp
+int main () {
+  for (int x = 1; x <= 10; x++) {
+  cout << 1 + (rand() % 6) << "\n";
+  }
+}
+```
+srand():  
+The srand() function is used to generate truly random numbers.  
+This function allows to specify a seed value as its parameter, which is used for the rand() function's algorithm.  
+```cpp
+int main () {
+  srand(98);
+
+  for (int x = 1; x <= 10; x++) {
+    cout << 1 + (rand() % 6) << endl;
+  }
+}
+```
+A solution to generate truly random numbers, is to use the current time as a seed value for the srand() function.  
+This example makes use of the time() function to get the number of seconds on your system time, and randomly seed the rand() function (we need to include the <ctime> header for it):
+  
+```cpp
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main () {
+  srand(time(0));
+
+  for (int x = 1; x <= 10; x++) {
+    cout << 1 + (rand() % 6) << endl;
+  }
+}
+```
+
+time(0) will return the current second count, prompting the srand() function to set a different seed for the rand() function each time the program runs.
+Using this seed value will create a different output each time we run the program.
+
+**Function Overloading**
+
+Function overloading allows to create multiple functions with the same name, so long as they have different parameters.
+
+For example, you might need a printNumber() function that prints the value of its parameter.
+```cpp
+void printNumber(int a) { 
+  cout << a;
+}
+```
+This is effective with integer arguments only. Overloading it will make it available for other types, such as floats.
+```cpp
+void printNumber(float a) { 
+  cout << a;
+}
+```
+Now, the same printNumber() function name will work for both integers and floats.  
+When overloading functions, the definition of the function must differ from each other by the types and/or the number of arguments in the argument list. 
+
+You can not overload function declarations that differ only by return type.  
+The following declaration results in an error.
+```cpp
+int printName(int a) { }
+float printName(int b) { }
+double printName(int c) { }
+```
+
+Function with same name but different return-type:
+```cpp
+#include <iostream>
+
+int sum(int a, int b) {
+  return a + b;
+}
+
+float sum(float a, float b) {
+  return a + b;
+}
+
+int main() {
+  float x = 2.12, y = 3.98;
+  
+  std::cout <<sum(2, 3)<<"\n"; // 5
+
+  std::cout <<sum(x, y)<<"\n"; // 6.1
+}
+```
