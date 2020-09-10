@@ -991,3 +991,501 @@ class Mother {
 };
 ```
 Now someVar can be accessed by any class that is derived from the Mother class.
+
+**Type of Inheritance**
+
+Access specifiers are also used to specify the type of inheritance.
+Remember, we used public to inherit the Daughter class: 
+```cpp
+class Daughter: public Mother
+```
+private and protected access specifiers can also be used here.
+
+Public Inheritance: public members of the base class become public members of the derived class and protected members of the base class become protected members of the derived class. A base class's private members are never accessible directly from a derived class, but can be accessed through calls to the public and protected members of the base class.
+
+Protected Inheritance: public and protected members of the base class become protected members of the derived class.
+
+Private Inheritance: public and protected members of the base class become private members of the derived class.
+Public inheritance is the most commonly used inheritance type.
+If no access specifier is used when inheriting classes, the type becomes private by default.
+
+When inheriting classes, the base class' constructor and destructor are not inherited.
+However, they are being called when an object of the derived class is created or deleted.
+
+To further explain this behavior, let's create a sample class that includes a constructor and a destructor:
+```cpp
+class Mother {
+ public:
+ Mother() 
+ {
+  cout <<"Mother ctor"<<endl;
+ }
+ ~Mother()
+ {
+  cout <<"Mother dtor"<<endl;
+ }
+};
+```
+Creating an object in main results in the following output:
+```cpp
+int main() {
+  Mother m;
+}
+/* Outputs
+Mother ctor
+Mother dtor
+*/
+```
+The object is created and then deleted, when the program finishes to run.
+
+Next, let's create a Daughter class, with its own constructor and destructor, and make it a derived class of the Mother:
+```cpp
+class Daughter: public Mother {
+public:
+ Daughter()
+ {
+  cout <<"Daughter ctor"<<endl;
+ }
+ ~Daughter()
+ {
+  cout <<"Daughter dtor"<<endl;
+ }
+};
+```
+Now, what happens when we create a Daughter object?
+```cpp
+int main() {
+  Daughter m;
+}
+
+/*Outputs
+Mother ctor
+Daughter ctor
+Daughter dtor
+Mother dtor
+*/
+```
+
+Note that the base class' constructor is called first, and the derived class' constructor is called next.
+When the object is destroyed, the derived class's destructor is called, and then the base class' destructor is called.
+You can think of it as the following: The derived class needs its base class in order to work - that is why the base class is set up first.
+
+Constructors
+The base class constructor is called first.
+
+Destructors
+The derived class destructor is called first, and then the base class destructor gets called.
+
+This sequence makes it possible to specify initialization and de-initialization scenarios for your derived classes.
+
+**Polymorphism**
+one function, with different implementations
+
+Polymorphism can be demonstrated more clearly using an example:
+Suppose you want to make a simple game, which includes different enemies: monsters, ninjas, etc. All enemies have one function in common: an attack function. However, they each attack in a different way. In this situation, polymorphism allows for calling the same attack function on different objects, but resulting in different behaviors.
+
+The first step is to create the Enemy class.
+```cpp
+class Enemy {
+ protected: 
+  int attackPower;
+ public:
+  void setAttackPower(int a){
+   attackPower = a;
+  }
+};
+```
+Our Enemy class has a public method called setAttackPower, which sets the protected attackPower member variable.
+
+Our second step is to create classes for two different types of enemies, Ninjas and Monsters. Both of these new classes inherit from the Enemy class, so each has an attack power. At the same time, each has a specific attack function. 
+```cpp
+class Ninja: public Enemy {
+ public:
+  void attack() {
+   cout << "Ninja! - "<<attackPower<<endl;
+  }
+};
+
+class Monster: public Enemy {
+ public:
+  void attack() {
+   cout << "Monster! - "<<attackPower<<endl;
+  }
+};
+```
+As you can see, their individual attack functions differ.
+Now we can create our Ninja and Monster objects in main. 
+```cpp
+int main() {   
+ Ninja n;
+ Monster m;  
+}
+```
+Ninja and Monster inherit from Enemy, so all Ninja and Monster objects are Enemy objects. This allows us to do the following:
+```cpp
+Enemy *e1 = &n;
+Enemy *e2 = &m;
+```
+We've now created two pointers of type Enemy, pointing them to the Ninja and Monster objects.
+
+Now, we can call the corresponding functions:
+```cpp
+int main() {
+  Ninja n;
+  Monster m;
+  Enemy *e1 = &n;
+  Enemy *e2 = &m;
+
+ e1->setAttackPower(20);
+ e2->setAttackPower(80);
+
+ n.attack();
+ m.attack();
+}
+
+/* Output:
+Ninja! - 20
+Monster! - 80
+*/
+```
+
+We would have achieved the same result by calling the functions directly on the objects. However, it's faster and more efficient to use pointers.
+Also, the pointer demonstrates, that you can use the Enemy pointer without actually knowing that it contains an object of the subclass.
+
+**Virtual Functions**
+
+The previous example demonstrates the use of base class pointers to the derived classes. Why is that useful? Continuing on with our game example, we want every Enemy to have an attack() function.
+To be able to call the corresponding attack() function for each of the derived classes using Enemy pointers, we need to declare the base class function as virtual.
+Defining a virtual function in the base class, with a corresponding version in a derived class, allows polymorphism to use Enemy pointers to call the derived classes' functions.
+Every derived class will override the attack() function and have a separate implementation:
+```cpp
+class Enemy {
+ public:
+  virtual void attack() {
+  }
+};
+
+class Ninja: public Enemy {
+ public:
+  void attack() {
+   cout << "Ninja!"<<endl;
+  }
+};
+
+class Monster: public Enemy {
+ public:
+  void attack() {
+   cout << "Monster!"<<endl;
+ }
+};
+```
+A virtual function is a base class function that is declared using the keyword virtual.
+
+Now, we can use Enemy pointers to call the attack() function.
+```
+int main() {
+  Ninja n;
+  Monster m;
+  Enemy *e1 = &n;
+  Enemy *e2 = &m;
+
+  e1->attack();
+  e2->attack();
+}
+
+/* Output:
+Ninja!
+Monster!
+*/
+```
+As the attack() function is declared virtual, it works like a template, telling that the derived class might have an attack() function of its own.
+
+Our game example serves to demonstrate the concept of polymorphism; we are using Enemy pointers to call the same attack() function, and generating different results.
+```cpp
+e1->attack();
+e2->attack();
+```
+If a function in the base class is virtual, the function's implementation in the derived class is called according to the actual type of the object referred to, regardless of the declared type of the pointer.
+A class that declares or inherits a virtual function is called a polymorphic class.
+
+Virtual functions can also have their implementation in the base class: 
+```cpp
+class Enemy {
+ public:
+  virtual void attack() {
+   cout << "Enemy!"<<endl;
+  }
+};
+
+class Ninja: public Enemy {
+ public:
+  void attack() {
+   cout << "Ninja!"<<endl;
+  }
+};
+
+class Monster: public Enemy {
+ public:
+  void attack() {
+   cout << "Monster!"<<endl;
+  }
+};
+```
+Now, when you create an Enemy pointer, and call the attack() function, the compiler will call the function, which corresponds to the object's type, to which the pointer points:
+```cpp
+int main() {
+ Ninja n;
+ Monster m;
+ Enemy e;
+
+ Enemy *e1 = &n;
+ Enemy *e2 = &m;
+ Enemy *e3 = &e;
+
+ e1->attack();
+ // Outputs "Ninja!"
+
+ e2->attack();
+ // Outputs "Monster!"
+
+ e3->attack();
+ // Outputs "Enemy!"
+}
+```
+
+This is how polymorphism is generally used. You have different classes with a function of the same name, and even the same parameters, but with different implementations.
+
+
+Note: When a virtual function is called via base class pointer, it calls those class' function to which the base class pointer points. 
+
+**Pure Virtual Function**
+
+In some situations you'd want to include a virtual function in a base class so that it may be redefined in a derived class to suit the objects of that class, but that there is no meaningful definition you could give for the function in the base class.
+The virtual member functions without definition are known as pure virtual functions. They basically specify that the derived classes define that function on their own.
+The syntax is to replace their definition by = 0 (an equal sign and a zero): 
+```cpp
+class Enemy {
+ public:
+  virtual void attack() = 0;
+}; 
+```
+The = 0 tells the compiler that the function has no body.
+
+
+A pure virtual function basically defines, that the derived classes will have that function defined on their own.
+Every derived class inheriting from a class with a pure virtual function must override that function.
+If the pure virtual function is not overridden in the derived class, the code fails to compile and results in an error when you try to instantiate an object of the derived class.
+
+The pure virtual function in the Enemy class must be overridden in its derived classes.
+```cpp
+class Enemy {
+ public:
+  virtual void attack() = 0;
+};
+
+class Ninja: public Enemy {
+ public:
+  void attack() {
+   cout << "Ninja!"<<endl;
+  }
+};
+
+class Monster: public Enemy {
+ public:
+  void attack() {
+   cout << "Monster!"<<endl;
+  }
+};
+```
+
+**Abstract Classes**
+
+You cannot create objects of the base class with a pure virtual function.
+Running the following code will return an error:
+```cpp
+Enemy e; // Error
+```
+
+These classes are called abstract. They are classes that can only be used as base classes, and thus are allowed to have pure virtual functions.
+
+You might think that an abstract base class is useless, but it isn't. It can be used to create pointers and take advantage of all its polymorphic abilities.
+For example, you could write:
+```cpp
+Ninja n;
+Monster m;
+Enemy *e1 = &n;
+Enemy *e2 = &m;
+
+e1->attack();
+e2->attack();
+```
+
+In this example, objects of different but related types are referred to using a unique type of pointer (Enemy*), and the proper member function is called every time, just because they are virtual.
+
+**Function Templates**
+
+Functions and classes help to make programs easier to write, safer, and more maintainable.
+However, while functions and classes do have all of those advantages, in certain cases they can also be somewhat limited by C++'s requirement that you specify types for all of your parameters.
+
+For example, you might want to write a function that calculates the sum of two numbers, similar to this:
+```cpp
+int sum(int a, int b) {
+  return a+b;
+}
+```
+We can now call the function for two integers in our main.
+```cpp
+int sum(int a, int b) {
+  return a+b;
+}
+
+int main () {
+  int x=7, y=15;
+  cout << sum(x, y) << endl;
+}
+// Outputs 22
+```
+
+The function works as expected, but is limited solely to integers.
+
+It becomes necessary to write a new function for each new type, such as doubles.
+```cpp
+double sum(double a, double b) {
+  return a+b;
+}
+```
+Wouldn't it be much more efficient to be able to write one version of sum() to work with parameters of any type?
+Function templates give us the ability to do that!
+With function templates, the basic idea is to avoid the necessity of specifying an exact type for each variable. Instead, C++ provides us with the capability of defining functions using placeholder types, called template type parameters.
+
+To define a function template, use the keyword template, followed by the template type definition: 
+```cpp
+template <class T> 
+```
+We named our template type T, which is a generic data type.
+  
+Now we can use our generic data type T in the function:
+```cpp
+template <class T>
+T sum(T a, T b) {
+  return a+b;
+}
+
+int main () {
+    int x=7, y=15;
+    cout << sum(x, y) << endl;
+}
+
+// Outputs 22
+```
+
+The function returns a value of the generic type T, taking two parameters, also of type T.
+Our new function worked exactly as the previous one for integer values did.
+
+The same function can be used with other data types, for example doubles:
+```cpp
+template <class T>
+T sum(T a, T b) {
+  return a+b;
+}
+
+int main () {
+  double x=7.15, y=15.54;
+  cout << sum(x, y) << endl;
+}
+// Outputs 22.69
+```
+
+The compiler automatically calls the function for the corresponding type.
+When creating a template type parameter, the keyword typename may be used as an alternative to the keyword class: 
+```cpp
+template <typename T>.
+```
+In this context, the keywords are identical, but throughout this course, we'll use the keyword class.
+
+Template functions can save a lot of time, because they are written only once, and work with different types.
+Template functions reduce code maintenance, because duplicate code is reduced significantly.
+Enhanced safety is another advantage in using template functions, since it's not necessary to manually copy functions and change types.
+
+Function templates also make it possible to work with multiple generic data types. Define the data types using a comma-separated list.
+Let's create a function that compares arguments of varying data types (an int and a double), and prints the smaller one.
+```cpp
+template <class T, class U>
+```
+As you can see, this template declares two different generic data types, T and U.
+
+Now we can continue with our function declaration: 
+```cpp
+template <class T, class U>
+T smaller(T a, U b) {
+  return (a < b ? a : b);
+}
+```
+The ternary operator checks the a<b condition and returns the corresponding result. The expression (a < b ? a : b) is equivalent to the expression if a is smaller than b, return a, else, return b.
+
+In our main, we can use the function for different data types:
+```cpp
+template <class T, class U>
+T smaller(T a, U b) {
+  return (a < b ? a : b);
+}
+
+int main () {
+  int x=72;
+  double y=15.34;
+  cout << smaller(x, y) << endl;
+}
+
+// Outputs 15
+```
+
+The output converts to an integer, because we specified the function template's return type to be of the same type as the first parameter (T), which is an integer.
+```cpp
+#include <iostream>
+using namespace std;
+
+template <class T, class U>
+T min(T x, U y) {
+  return (x < y ? x : y);
+}
+
+int main() {
+  cout<<min(12.5, 13)<<"\n";
+  cout<<min(14, 13.5);
+}
+/* output
+12.5
+13
+*/
+```
+
+T is short for Type, and is a widely used name for type parameters.
+It's not necessary to use T, however; you can declare your type parameters using any identifiers that work for you. The only terms you need to avoid are C++ keywords.
+Remember that when you declare a template parameter, you absolutely must use it in your function definition. Otherwise, the compiler will complain!
+
+**Class Templates**
+
+Just as we can define function templates, we can also define class templates, allowing classes to have members that use template parameters as types.
+The same syntax is used to define the class template: 
+```cpp
+template <class T>
+class MyClass {
+
+};
+```
+Just as with function templates, you can define more than one generic data type by using a comma-separated list.
+
+
+As an example, let's create a class Pair, that will be holding a pair of values of a generic type.
+```cpp
+template <class T>
+class Pair {
+ private:
+  T first, second;
+ public:
+  Pair (T a, T b):
+   first(a), second(b) {
+  }
+};
+```
+The code above declares a class template Pair, with two private variables of a generic type, and one constructor to initialize the variables.
