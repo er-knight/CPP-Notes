@@ -1,5 +1,7 @@
 # CPP-Notes
 
+[typeid()](https://codeforces.com/blog/entry/16101)
+
 do-while loop:
 ```cpp
 do {
