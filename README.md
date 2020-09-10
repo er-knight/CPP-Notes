@@ -1489,3 +1489,373 @@ class Pair {
 };
 ```
 The code above declares a class template Pair, with two private variables of a generic type, and one constructor to initialize the variables.
+
+A specific syntax is required in case you define your member functions outside of your class - for example in a separate source file.
+You need to specify the generic type in angle brackets after the class name.
+For example, to have a member function bigger() defined outside of the class, the following syntax is used: 
+```cpp
+template <class T>
+class Pair {
+ private:
+  T first, second;
+ public:
+  Pair (T a, T b):
+   first(a), second(b){
+  }
+  T bigger();
+};
+
+template <class T>
+T Pair<T>::bigger() {
+  // some code
+}
+```
+
+The bigger function returns the greater value of the two member variables.
+```cpp
+template <class T>
+class Pair {
+ private:
+  T first, second;
+ public:
+  Pair (T a, T b):
+   first(a), second(b){
+  }
+  T bigger();
+};
+
+template <class T>
+T Pair<T>::bigger() {
+  return (first>second ? first : second);
+}
+```
+
+To create objects of the template class for different types, specify the data type in angle brackets, as we did when defining the function outside of the class.
+Here, we create a Pair object for integers.
+```cpp
+Pair <int> obj(11, 22);
+cout << obj.bigger();
+// Outputs 22
+```
+
+We can use the same class to create an object that stores any other type.
+```cpp
+Pair <double> obj(23.43, 5.68);
+cout << obj.bigger();
+// Outputs 23.43
+```
+
+**Template Specialization**
+
+In case of regular class templates, the way the class handles different data types is the same; the same code runs for all data types.
+Template specialization allows for the definition of a different implementation of a template when a specific type is passed as a template argument.
+
+For example, we might need to handle the character data type in a different manner than we do numeric data types.
+To demonstrate how this works, we can first create a regular template.
+```cpp
+template <class T>
+class MyClass {
+ public:
+  MyClass (T x) {
+   cout <<x<<" -  not a char"<<endl;
+  }
+};
+```
+As a regular class template, MyClass treats all of the various data types in the same way.
+
+To specify different behavior for the data type char, we would create a template specialization.
+```cpp
+template <class T>
+class MyClass {
+ public:
+  MyClass (T x) {
+   cout <<x<<" -  not a char"<<endl;
+  }
+};
+
+template < >
+class MyClass<char> {
+ public:
+  MyClass (char x) {
+   cout <<x<<" is a char!"<<endl;
+  }
+};
+```
+First of all, notice that we precede the class name with template<>, including an empty parameter list. This is because all types are known and no template arguments are required for this specialization, but still, it is the specialization of a class template, and thus it requires to be noted as such.
+
+But more important than this prefix, is the <char> specialization parameter after the class template name. This specialization parameter itself identifies the type for which the template class is being specialized (char).
+In the example above, the first class is the generic template, while the second is the specialization.
+If necessary, your specialization can indicate a completely different behavior from the behavior of the generic template.
+  
+The next step is to declare objects of different types and check the result:
+```cpp
+int main () {
+  MyClass<int> ob1(42);
+  MyClass<double> ob2(5.47);
+  MyClass<char> ob3('s');
+}
+/* Output: 
+42 - not a char
+5.47 - not a char
+s is a char!
+*/
+```
+
+As you can see, the generic template worked for int and double. However, our template specialization was invoked for the char data type.
+Keep in mind that there is no member "inheritance" from the generic template to the specialization, so all members of the template class specializations must be defined on their own. 
+
+**Exceptions**
+
+Problems that occur during program execution are called exceptions.
+In C++ exceptions are responses to anomalies that arise while the program is running, such as an attempt to divide by zero.
+
+Throwing Exceptions
+
+C++ exception handling is built upon three keywords: try, catch, and throw.
+throw is used to throw an exception when a problem shows up.
+For example: 
+```cpp
+int motherAge = 29;
+int sonAge = 36;
+if (sonAge > motherAge) {
+  throw "Wrong age values";
+}
+```
+The code looks at sonAge and motherAge, and throws an exception if sonAge is found to be the greater of the two.
+In the throw statement, the operand determines a type for the exception. This can be any expression. The type of the expression's result will determine the type of the exception thrown.
+
+Catching Exceptions
+
+A try block identifies a block of code that will activate specific exceptions. It's followed by one or more catch blocks. The catch keyword represents a block of code that executes when a particular exception is thrown.
+Code that could generate an exception is surrounded with the try/catch block.
+You can specify what type of exception you want to catch by the exception declaration that appears in parentheses following the keyword catch.
+For example:
+```
+try {
+  int motherAge = 29;
+  int sonAge = 36;
+  if (sonAge > motherAge) {
+   throw 99;
+  }
+} 
+catch (int x) {
+  cout<<"Wrong age values - Error Code "<<x;
+}
+
+/*Output
+"Wrong age values - Error Code 99"
+*/
+```
+
+The try block throws the exception, and the catch block then handles it.
+The error code 99, which is an integer, appears in the throw statement, so it results in an exception of type int.
+Multiple catch statements may be listed to handle various exceptions in case multiple exceptions are thrown by the try block.
+
+**Exception Handling**
+
+Exception handling is particularly useful when dealing with user input.
+For example, for a program that requests user input of two numbers, and then outputs their division, be sure that you handle division by zero, in case your user enters 0 as the second number.
+```cpp
+int main() {
+  int num1;
+  cout <<"Enter the first number:";
+  cin >> num1;
+
+  int num2;
+  cout <<"Enter the second number:";
+  cin >> num2;
+
+  cout <<"Result:"<<num1 / num2;
+}
+```
+
+This program works perfectly if the user enters any number besides 0.
+In case of 0 the program crashes, so we need to handle that input.
+
+In the event that the second number is equal to 0, we need to throw an exception.
+```cpp
+int main() {
+  int num1;
+  cout <<"Enter the first number:";
+  cin >> num1;
+
+  int num2;
+  cout <<"Enter the second number:";
+  cin >> num2;
+
+  if(num2 == 0) {
+   throw 0;
+  } 
+
+  cout <<"Result:"<<num1 / num2;  
+}
+```
+
+This code throws an exception with the code 0 of type integer.
+Next stop: Using the try/catch block to handle the exception!
+
+
+Now we need to handle the thrown exception using a try/catch block.
+```cpp
+int main() {
+ try {
+  int num1;
+  cout <<"Enter the first number:";
+  cin >> num1;
+
+  int num2;
+  cout <<"Enter the second number:";
+  cin >> num2;
+
+  if(num2 == 0) {
+   throw 0;
+  } 
+
+  cout <<"Result:"<<num1 / num2; 
+ }
+ catch(int x) {
+  cout <<"Division by zero!";
+ }
+}
+```
+
+This results in the output of "Division by zero!" as an alternative to a program crash, when 0 is entered as the second number.
+
+In our case, we catch exceptions of type integer only. It's possible to specify that your catch block handles any type of exception thrown in a try block. To accomplish this, add an ellipsis (...) between the parentheses of catch: 
+```cpp
+try {
+  /*statements */ 
+} catch(...) {
+  /*statements */ 
+}
+```
+Note: Any type of value can be used in the catch block of exceptions.
+
+**Working with Files**
+
+Another useful C++ feature is the ability to read and write to files. That requires the standard C++ library called fstream.
+Three new data types are defined in fstream:
+ofstream: Output file stream that creates and writes information to files.
+`ifstream`: Input file stream that reads information from files.
+`fstream`: General file stream, with both ofstream and ifstream capabilities that allow it to create, read, and write information to files.
+
+To perform file processing in C++, header files <iostream> and <fstream> must be included in the C++ source file.
+```cpp
+#include <iostream>
+#include <fstream>
+```
+These classes are derived directly or indirectly from the classes istream and ostream. We have already used objects whose types were these classes: cin is an object of class istream and cout is an object of class ostream.
+  
+**Opening a File**
+
+A file must be opened before you can read from it or write to it.
+Either the ofstream or fstream object may be used to open a file for writing.
+Let's open a file called "test.txt" and write some content to it: 
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+  ofstream MyFile;
+  MyFile.open("test.txt");
+
+  MyFile << "Some text. \n";
+}
+```
+The above code creates an ofstream object called MyFile, and uses the open() function to open the "test.txt" file on the file system. As you can see, the same stream output operator is used to write into the file.
+If the specified file does not exist, the open function will create it automatically.
+
+**Closing a File**
+
+When you've finished working with a file, close it using the member function close().
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+  ofstream MyFile;
+  MyFile.open("test.txt");
+
+  MyFile << "Some text! \n";
+  MyFile.close();
+}
+```
+Running this code will cause a "test.txt" file to be created in the directory of your project with "Some text!" written in it.
+You also have the option of specifying a path for your file in the open function, since it can be in a location other than that of your project.
+
+You can also provide the path to your file using the ofstream objects constructor, instead of calling the open function.
+```cpp
+#include <fstream>
+using namespace std;
+
+int main() {
+  ofstream MyFile("test.txt");
+
+  MyFile << "This is awesome! \n";
+  MyFile.close();
+}
+```
+As with the open function, you can provide a full path to your file located in a different directory.
+
+Under certain circumstances, such as when you don't have file permissions, the open function can fail.
+The `is_open()` member function checks whether the file is open and ready to be accessed.
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+  ofstream MyFile("test.txt");
+
+  if (MyFile.is_open()) {
+   MyFile << "This is awesome! \n";
+  }
+  else {
+   cout << "Something went wrong";
+  }
+  MyFile.close();
+}
+```
+The `is_open()` member function checks whether the file is open and ready to be accessed.
+
+**File Opening Modes**
+
+An optional second parameter of the open function defines the mode in which the file is opened. This list shows the supported modes.
+| Mode Parameter | Meaning |
+| :------------: |---------|
+| `ios::app` | append to end of file |
+| `ios::ate` | go to end of file on opening | 
+| `ios::binary` | file open in binary mode |
+| `ios::in` | open file for reading only |
+| `ios::out` | open file for writing only |
+| `ios::trunc` | delete contents of a file if it exists | 
+
+All these flags can be combined using the bitwise operator OR (|).
+For example, to open a file in write mode and truncate it, in case it already exists, use the following syntax:
+```cpp
+ofstream outfile;
+outfile.open("file.dat", ios::out | ios::trunc );
+```
+
+**Reading from a File**
+
+You can read information from a file using an ifstream or fstream object.
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main () {
+  string line;
+  ifstream MyFile("test.txt");
+  while ( getline (MyFile, line) ) {
+   cout << line << '\n';
+  }
+  MyFile.close();
+}
+```
+The getline function reads characters from an input stream and places them into a string.
+The example above reads a text file and prints the contents to the screen.
+Our while loop uses the getline function to read the file line by line.
