@@ -1,5 +1,7 @@
 # CPP-Notes
 
+**Polymorphism** - function overloading and operator overloading
+
 [typeid()](https://codeforces.com/blog/entry/16101)  
 [Bjarne Stroustrup's C++ Style and Technique FAQ](https://www.stroustrup.com/bs_faq2.html)
 
