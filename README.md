@@ -20,7 +20,7 @@ Generally, short has half of the size of int and long has two-times the size of 
 Note: Size of float datatype depends on system architecture. In most modern system architecture, float has minimum size of 4 bytes. 
 Generally, double has two-times the size of float and long double has two-times or four-times the size of float.
 
-**floats are always signed.**
+**All numric datatypes are always signed (unless specified unsigned).**
 
 Characters:
 A char variable holds a 1-byte integer. However, instead of interpreting the value of the char as an integer, the value of a char variable is typically interpreted as an ASCII character.
