@@ -40,12 +40,14 @@ pointer-variable = new data-type[size];
 ```
 **Dynamically allocates memory for 10 integers continuously of type int and returns pointer to the first element of the sequence, which is assigned to p(a pointer).**
 **p[0] refers to first element, p[1] refers to second element and so on.**
+**|__|__|__|__|__|__|__|__|__|__|
+  |--|--|--|--|--|--|--|--|--|--|**
 
 ### Normal Array Declaration vs Using new
 **There is a difference between declaring a normal array and allocating a block of memory using new. The most important difference is, normal arrays are deallocated by compiler (If array is local, then deallocated when function returns or completes). However, dynamically allocated arrays always remain there until either they are deallocated by programmer or program terminates.**
 
 ### What if enough memory is not available during runtime?
-**If enough memory is not available in the heap to allocate, the new request indicates failure by throwing an exception of type std::bad_alloc, unless “nothrow” is used with the new operator, in which case it returns a NULL pointer (scroll to section “Exception handling of new operator” in this article). Therefore, it may be good idea to check for the pointer variable produced by new before using it program.**
+**If enough memory is not available in the heap to allocate, the new request indicates failure by throwing an exception of type `std::bad_alloc`, unless `nothrow` is used with the new operator, in which case it returns a NULL pointer. Therefore, it may be good idea to check for the pointer variable produced by new before using it program.**
 
 ```cpp
 int *p = new(nothrow) int;
@@ -136,3 +138,5 @@ Value of p: 29
 Value of r: 75.25
 Value store in block of memory: 1 2 3 4 5 
 ```
+
+**[Reference](https://www.geeksforgeeks.org/new-and-delete-operators-in-cpp-for-dynamic-memory/)**
