@@ -40,8 +40,7 @@ pointer-variable = new data-type[size];
 ```
 **Dynamically allocates memory for 10 integers continuously of type int and returns pointer to the first element of the sequence, which is assigned to p(a pointer).**
 **p[0] refers to first element, p[1] refers to second element and so on.**
-**|__|__|__|__|__|__|__|__|__|__|
-  |--|--|--|--|--|--|--|--|--|--|**
+
 
 ### Normal Array Declaration vs Using new
 **There is a difference between declaring a normal array and allocating a block of memory using new. The most important difference is, normal arrays are deallocated by compiler (If array is local, then deallocated when function returns or completes). However, dynamically allocated arrays always remain there until either they are deallocated by programmer or program terminates.**
