@@ -4,7 +4,8 @@
 **Deque** - Double ended queue
 
 [typeid()](https://codeforces.com/blog/entry/16101)  
-[Bjarne Stroustrup's C++ Style and Technique FAQ](https://www.stroustrup.com/bs_faq2.html)
+[Bjarne Stroustrup's C++ Style and Technique FAQ](https://www.stroustrup.com/bs_faq2.html)  
+[`const` keyword](https://www.studytonight.com/cpp/const-keyword.php)
 
 do-while loop:
 ```cpp
