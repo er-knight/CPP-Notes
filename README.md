@@ -2,14 +2,8 @@
 
 # CPP-Notes
 
-<details>
-  <summary>
-    <strong>Polymorphism -</strong> function overloading and operator overloading</br>
-  </summary>  
-  <summary>
-  <strong>Deque -</strong> Double ended queue</br>
-  </summary>
-</details>
+**Polymorphism:** function overloading and operator overloading
+**Deque:** Double ended queue
 
 [typeid()](https://codeforces.com/blog/entry/16101)  
 [Bjarne Stroustrup's C++ Style and Technique FAQ](https://www.stroustrup.com/bs_faq2.html)  
