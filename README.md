@@ -2,7 +2,7 @@
 
 # CPP-Notes
 
-<details font-weight: "bold">
+<details>
   <strong>Polymorphism -</strong> function overloading and operator overloading</br>  
   <strong>Deque -</strong> Double ended queue</br>
 </details>
