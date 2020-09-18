@@ -3,8 +3,8 @@
 # CPP-Notes
 
 <details>
-  <strong>Polymorphism -</strong> function overloading and operator overloading</br>  
-  <strong>Deque -</strong> Double ended queue</br>
+  <div><strong>Polymorphism -</strong> function overloading and operator overloading</br></div>  
+  <div><strong>Deque -</strong> Double ended queue</br></div>
 </details>
 
 [typeid()](https://codeforces.com/blog/entry/16101)  
