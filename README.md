@@ -1,4 +1,4 @@
-# ![](https://github.com/theInvincible/CPP-Notes/blob/master/Collection/c-logo-icon-28389-Windows.ico) Notes
+![](https://github.com/theInvincible/CPP-Notes/blob/master/Collection/c-logo-icon-28389-Windows.ico)
 
 # CPP-Notes
 
