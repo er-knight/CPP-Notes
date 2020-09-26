@@ -1,4 +1,5 @@
 ![](https://github.com/theInvincible/CPP-Notes/blob/master/Collection/c-logo-icon-28389-Windows.ico)
+![](https://github.com/menobleknight/CPP-Notes/blob/master/Collection/Automatic%20type%20deduction%20in%20C%2B%2B14.png)
 
 # CPP-Notes
 
